@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login SITTA</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>SITTA - Login</h1>
+    </header>
+    <main class="container">
+        <form id="loginForm">
+            <label for="email">Email</label>
+            <input type="email" id="email" required placeholder="contoh: admin@ut.ac.id">
+            
+            <label for="password">Password</label>
+            <input type="password" id="password" required placeholder="Masukkan password">
+            
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <div style="margin-top: 10px;">
+            <button id="btnLupa" class="btn btn-secondary">Lupa Password</button>
+            <button id="btnDaftar" class="btn btn-secondary">Daftar</button>
+        </div>
+    </main>
+
+    <!-- Modal Lupa Password -->
+    <div id="modalLupa" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeLupa">&times;</span>
+            <p>Silakan hubungi Unit Program Belajar Jarak Jauh (UPBJJ) terdekat untuk reset password.</p>
+        </div>
+    </div>
+
+    <!-- Modal Daftar -->
+    <div id="modalDaftar" class="modal">
+        <div class="modal-content">
+            <span class="close" id="closeDaftar">&times;</span>
+            <p>Pendaftaran akun SITTA dilakukan melalui admisi UT. Kunjungi <a href="https://www.ut.ac.id" target="_blank">www.ut.ac.id</a> untuk informasi lebih lanjut.</p>
+        </div>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script>
+        // Ambil elemen
+        var form = document.getElementById('loginForm');
+        var modalLupa = document.getElementById('modalLupa');
+        var modalDaftar = document.getElementById('modalDaftar');
+        var btnLupa = document.getElementById('btnLupa');
+        var btnDaftar = document.getElementById('btnDaftar');
+        var closeLupa = document.getElementById('closeLupa');
+        var closeDaftar = document.getElementById('closeDaftar');
+
+        // Fungsi buka/tutup modal
+        btnLupa.onclick = function() {
+            modalLupa.style.display = 'block';
+        };
+        btnDaftar.onclick = function() {
+            modalDaftar.style.display = 'block';
+        };
+        closeLupa.onclick = function() {
+            modalLupa.style.display = 'none';
+        };
+        closeDaftar.onclick = function() {
+            modalDaftar.style.display = 'none';
+        };
+        window.onclick = function(event) {
+            if (event.target == modalLupa) {
+                modalLupa.style.display = 'none';
+            }
+            if (event.target == modalDaftar) {
+                modalDaftar.style.display = 'none';
+            }
+        };
+
+        // Login validation
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            var email = document.getElementById('email').value.trim();
+            var password = document.getElementById('password').value.trim();
+            var found = false;
+            for (var i = 0; i < dataPengguna.length; i++) {
+                if (dataPengguna[i].email === email && dataPengguna[i].password === password) {
+                    found = true;
+                    // Simpan info user sederhana (bisa pakai sessionStorage)
+                    sessionStorage.setItem('user', JSON.stringify(dataPengguna[i]));
+                    window.location.href = 'dashboard.html';
+                    break;
+                }
+            }
+            if (!found) {
+                alert('Email/Password yang anda masukkan salah');
+            }
+        };
+    </script>
+</body>
+</html>
