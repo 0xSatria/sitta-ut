@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tracking Pengiriman</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>Tracking Pengiriman</h1>
+    </header>
+    <main class="container">
+        <form id="trackingForm">
+            <label for="nomorDO">Nomor Delivery Order</label>
+            <input type="text" id="nomorDO" placeholder="Masukkan No. DO" required>
+            <button type="submit" class="btn">Cari</button>
+        </form>
+        <div id="hasil" style="margin-top: 20px;"></div>
+        <a href="dashboard.html" class="btn btn-secondary">Kembali ke Dashboard</a>
+    </main>
+
+    <script src="js/data.js"></script>
+    <script>
+        var form = document.getElementById('trackingForm');
+        var hasil = document.getElementById('hasil');
+
+        form.onsubmit = function(e) {
+            e.preventDefault();
+            var nomor = document.getElementById('nomorDO').value.trim();
+            var data = dataTracking[nomor];
+            hasil.innerHTML = "";
+            if (data) {
+                // Hitung persentase dummy (dari panjang perjalanan)
+                var progres = (data.perjalanan.length > 0) ? Math.round((data.perjalanan.length / 6) * 100) : 0;
+                if (progres > 100) progres = 100;
+
+                var html = "<h3>Detail Pengiriman</h3>";
+                html += "<p><strong>Nama Mahasiswa:</strong> " + data.nama + "</p>";
+                html += "<p><strong>Ekspedisi:</strong> " + data.ekspedisi + "</p>";
+                html += "<p><strong>Tanggal Kirim:</strong> " + data.tanggalKirim + "</p>";
+                html += "<p><strong>Jenis Paket:</strong> " + data.paket + "</p>";
+                html += "<p><strong>Total Pembayaran:</strong> " + data.total + "</p>";
+                html += "<p><strong>Status:</strong> " + data.status + "</p>";
+                html += '<div class="progress-container"><div class="progress-bar" style="width:' + progres + '%">' + progres + '%</div></div>';
+                html += "<h4>Riwayat Perjalanan</h4><ul>";
+                for (var i = 0; i < data.perjalanan.length; i++) {
+                    html += "<li><strong>" + data.perjalanan[i].waktu + "</strong> - " + data.perjalanan[i].keterangan + "</li>";
+                }
+                html += "</ul>";
+                hasil.innerHTML = html;
+            } else {
+                hasil.innerHTML = "<p style='color:red;'>Nomor DO tidak ditemukan.</p>";
+            }
+        };
+    </script>
+</body>
+</html>
